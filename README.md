@@ -19,7 +19,7 @@ The tiny RC serial interface uses an ATTINY84 microcontroller from
 Atmel. It's configured to use the internal 8Mhz clock. The board
 features and ISCP header, and power LED.
 
-![Schematic](https://github.com/kippandrew/tiny-rc-serial/blob/master/tiny-rc-serial-schematic.png)
+![Schematic](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-schematic.png)
 
 ### Components ###
 
