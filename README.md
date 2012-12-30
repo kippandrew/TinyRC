@@ -23,14 +23,15 @@ features and ISCP header, and power LED.
 
 ### Components ###
 
-*Board*
-- IC1 - Atmel ATTINY84A-SSU 14-SOIC SMD
-- C1 - Capcaitor 0.1uF
-- D1 - Diode SOD-323 SMD
-- R1 - Resistor 330 ohm 1/4W 1206 SMD
-- LED1 - LED red 1206 SMD
-- JP1 - 0.1" Pitch 2x5
-- JP2 - 0.1" pitch 2x3
+**Board**
+- IC1 - Atmel ATTINY84A-SSU 14-SOIC SMD [DigiKey P/N: ATTINY84A-SSU-ND](http://www.digikey.com/product-detail/en/ATTINY84A-SSU/ATTINY84A-SSU-ND/3046522)
+- C1 - Capcaitor 0.1uF [DigiKey P/N: 399-4151-ND](http://www.digikey.com/product-detail/en/C315C104M5U5TA/399-4151-ND/817927)
+- D1 - Diode SOD-323 SMD [DigiKey P/N: 568-5003-1-ND](http://www.digikey.com/product-detail/en/BAS316,115/568-5003-1-ND/2209919)
+- R1 - Resistor 330 ohm 1/4W 1206 SMD [DigiKey P/N: 311-330ERCT-ND](http://www.digikey.com/product-detail/en/RC1206JR-07330RL/311-330ERCT-ND/732226)
+- LED1 - LED Red 1206 SMD [DigiKey P/N: 160-1167-1-ND](http://www.digikey.com/product-detail/en/LTST-C150CKT/160-1167-1-ND/269239)
+- JP1 - 0.1" pitch Header 2x5 [DigiKey P/N: ]()
+- JP2 - 0.1" pitch Header 2x3 [DigiKey P/N: ]()
+- JP3 - JST PH Header (4) [DigiKey P/N: ]() 
 
 Software
 --------
