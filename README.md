@@ -78,10 +78,31 @@ Software
 --------
 
 The tiny RC serial interface runs and ATTINY Arduino core
-(instructions on how to use the attiny Arduino core can be found
-[here](http://hlt.media.mit.edu/?p=1695). To program the board you
-will need and AVR programmer such as the [Pocket AVR
+(instructions on how to use the ATTINY Arduino core can be found
+[here](http://hlt.media.mit.edu/?p=1695)). To program the board you
+will need and AVR ISP programmer such as the [Pocket AVR
 Programmer](https://www.sparkfun.com/products/9825) from SparkFun. It
 is also possible to using a standard Arduino as an ISP programmer.
+
+When programming the tiny RC serial interface for the first time, be
+sure to burn the bootloader, and set the fuse bits for 8Mhz clock. The
+default for the ATTINY84 is 1Mhz.
+
+Instructions
+------------
+
+By default the tiny RC serial interface will output a 16 byte serial
+packet every 100ms. The first 4 bytes are a header used to identify
+the start of the packet. The packet header is 4 bytes with a value 0xFF.
+Each channel follows the packet header encoded in two bytes.
+
+Example:
+
+    --------------------------------------------------------------------------------------------------------------------------
+    | header (4 bytes)       | CH1 (2 bytes) | CH2 (2 bytes) | CH3 (2 bytes) | CH4 (2 bytes) | CH5 (2 bytes) | CH6 (2 bytes) |
+    --------------------------------------------------------------------------------------------------------------------------
+    | 0xFF, 0xFF, 0xFF, 0xFF | 0x00, 0x01    | 0x02, 0x03    | 0x04, 0x05    | 0x06, 0x07    | 0x06, 0x07    | 0x08, 0x0A    |
+    --------------------------------------------------------------------------------------------------------------------------
+
 
  
