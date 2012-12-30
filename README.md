@@ -1,28 +1,28 @@
-tiny-rc-serial
+TinyRC
 ==============
 
 About
 -----
-The tiny RC serial interface is a open source hardware device for
+The TinyRC is a open source hardware device for
 converting servo signals from RC receivers (such as the Spektrum
 AR6210) into a TTL serial stream that can be read by a microcontroller
 such as an Arduino. 
 
-The tiny RC serial interface works by timing the pulses received on up to
-6 channels, and using an ATTINY84 microcontroller to convert those
+The TinyRC works by timing the pulses received on up to
+6 channels, and using an ATTiny84 microcontroller to convert those
 pulses into a serial packet stream.
 
 Hardware
 --------
-The tiny RC serial interface uses an ATTINY84 microcontroller from
+The TinyRC uses an ATTiny84 microcontroller from
 Atmel. The board features and ISCP programming header, decoupling caps
 and power indicator LED.
 
 The board accepts a +5V source, and can provide power to the receiver. 
 
-![Schematic](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-schematic.png)
+![Schematic](https://raw.github.com/kippandrew/TinyRC/master/tiny-rc-serial-schematic.png)
 
-![Board](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-board.png)
+![Board](https://raw.github.com/kippandrew/TinyRC/master/tiny-rc-serial-board.png)
 
 ### Components ###
 
@@ -77,21 +77,21 @@ The board accepts a +5V source, and can provide power to the receiver.
 Software
 --------
 
-The tiny RC serial interface runs and ATTINY Arduino core
+The TinyRC runs and ATTINY Arduino core
 (instructions on how to use the ATTINY Arduino core can be found
 [here](http://hlt.media.mit.edu/?p=1695)). To program the board you
 will need and AVR ISP programmer such as the [Pocket AVR
 Programmer](https://www.sparkfun.com/products/9825) from SparkFun. It
 is also possible to using a standard Arduino as an ISP programmer.
 
-When programming the tiny RC serial interface for the first time, be
+When programming the TinyRC for the first time, be
 sure to burn the bootloader, and set the fuse bits for 8Mhz clock. The
-default for the ATTINY84 is 1Mhz.
+default for the ATTiny84 is 1Mhz.
 
 Instructions
 ------------
 
-By default the tiny RC serial interface will output a 16 byte serial
+By default the TinyRC will output a 16 byte serial
 packet every 100ms. The first 4 bytes are a header used to identify
 the start of the packet. The packet header is 4 bytes with a value 0xFF.
 Each channel follows the packet header encoded in two bytes.
