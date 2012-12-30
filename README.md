@@ -59,17 +59,17 @@ features and ISCP header, and power LED.
     <tr>
         <td>JP1</td>
         <td>0.1" pitch Header 2x5</td>
-        <td>DigiKey P/N: <a href=""></a></td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/67997-410HLF/609-3243-ND/1878475">609-3243-ND</a></td>
     </tr>
     <tr>
         <td>JP2</td>
         <td>0.1" pitch Header 2x3</td>
-        <td>DigiKey P/N: <a href=""></a></td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/77313-422R06LF/609-4517-ND/2665635">609-4517-ND</a></td>
     </tr>
     <tr>
         <td>JP3</td>
         <td>JST PH Header (4) </td>
-        <td>DigiKey P/N: <a href=""></a></td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/scripts/DkSearch/dksus.dll?WT.z_header=search_go&lang=en&keywords=455-1706-ND&x=0&y=0&cur=USD">455-1706-ND</a></td>
     </tr>
 </table>
 
