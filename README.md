@@ -34,7 +34,7 @@ features and ISCP header, and power LED.
     <tr>
         <td>IC1</td>
         <td>Atmel ATTINY84A-SSU 14-SOIC SMD</td>
-        <td>[DigiKey P/N: ATTINY84A-SSU-ND](http://www.digikey.com/product-detail/en/ATTINY84A-SSU/ATTINY84A-SSU-ND/3046522)</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/ATTINY84A-SSU/ATTINY84A-SSU-ND/3046522">ATTINY84A-SSU-ND</a></td>
     </tr>
     <tr>
     </tr>
