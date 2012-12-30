@@ -96,13 +96,69 @@ packet every 100ms. The first 4 bytes are a header used to identify
 the start of the packet. The packet header is 4 bytes with a value 0xFF.
 Each channel follows the packet header encoded in two bytes.
 
-Example:
-
+Example Packet:
     --------------------------------------------------------------------------------------------------------------------------
     | header (4 bytes)       | CH1 (2 bytes) | CH2 (2 bytes) | CH3 (2 bytes) | CH4 (2 bytes) | CH5 (2 bytes) | CH6 (2 bytes) |
     --------------------------------------------------------------------------------------------------------------------------
     | 0xFF, 0xFF, 0xFF, 0xFF | 0x00, 0x01    | 0x02, 0x03    | 0x04, 0x05    | 0x06, 0x07    | 0x06, 0x07    | 0x08, 0x0A    |
     --------------------------------------------------------------------------------------------------------------------------
 
+Example reading the packet from Arduino (Mega):
 
- 
+    uint8_t packetHeader[4] = {
+      0xFF, 0xFF, 0xFF, 0xFF};
+
+    void setup() {
+      // initialize serial
+      Serial.begin(115200); 
+      Serial1.begin(9600);
+    }
+
+    boolean readPacketHeader(uint8_t *header, size_t headerLength, uint32_t timeout) {
+      byte index = 0;
+      byte b = 0;
+      uint32_t startTime = millis();
+      while (millis() - startTime < timeout) {
+        if (index >= headerLength) {
+          return true;
+        }
+        if (Serial1.available() > 0) {
+          b = Serial1.read();
+          if (b == header[index]) {
+            index++;
+          } 
+          else {
+            index = 0;
+          }
+        }
+      }
+      // timeout
+      return false;
+    }
+
+    void loop() {
+      static uint16_t channels[6];
+      byte len;
+      uint8_t buf[2];
+
+      if (readPacketHeader(packetHeader, 4, 10)) {
+        // for each channel
+        for (int ch = 0; ch < 6; ch++) {
+          // Read two bytes
+          len = Serial1.readBytes((char*)buf, 2);
+          if (len >= 2) {
+            memcpy(&channels[ch], buf, sizeof(uint16_t));
+          }
+        }
+      }
+      
+      for (int ch = 0; ch < 6; ch++) {
+        Serial.print("ch ");
+        Serial.print(ch + 1, DEC);
+        Serial.print(" ");
+        Serial.print(channels[ch]);
+        Serial.print(" ");
+      }
+      
+      Serial.println();
+    }
