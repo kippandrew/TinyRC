@@ -19,6 +19,8 @@ The tiny RC serial interface uses an ATTINY84 microcontroller from
 Atmel. It's configured to use the internal 8Mhz clock. The board
 features and ISCP header, and power LED.
 
+The board accepts a 5V source, and can provide power to the receiver. 
+
 ![Schematic](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-schematic.png)
 
 ### Components ###
@@ -72,6 +74,8 @@ features and ISCP header, and power LED.
         <td>DigiKey P/N: <a href="http://www.digikey.com/scripts/DkSearch/dksus.dll?WT.z_header=search_go&lang=en&keywords=455-1706-ND&x=0&y=0&cur=USD">455-1706-ND</a></td>
     </tr>
 </table>
+
+![Board](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-board.png)
 
 Software
 --------
