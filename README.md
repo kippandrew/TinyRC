@@ -14,18 +14,17 @@ pulses into a serial packet stream.
 
 Hardware
 --------
-
 The tiny RC serial interface uses an ATTINY84 microcontroller from
-Atmel. It's configured to use the internal 8Mhz clock. The board
-features and ISCP header, and power LED.
+Atmel. The board features and ISCP programming header, decoupling caps
+and power indicator LED.
 
-The board accepts a 5V source, and can provide power to the receiver. 
+The board accepts a +5V source, and can provide power to the receiver. 
 
 ![Schematic](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-schematic.png)
 
-### Components ###
+![Board](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-board.png)
 
-**Board**
+### Components ###
 
 <table>
     <tr>
@@ -75,7 +74,14 @@ The board accepts a 5V source, and can provide power to the receiver.
     </tr>
 </table>
 
-![Board](https://raw.github.com/kippandrew/tiny-rc-serial/master/tiny-rc-serial-board.png)
-
 Software
 --------
+
+The tiny RC serial interface runs and ATTINY Arduino core
+(instructions on how to use the attiny Arduino core can be found
+[here](http://hlt.media.mit.edu/?p=1695). To program the board you
+will need and AVR programmer such as the [Pocket AVR
+Programmer](https://www.sparkfun.com/products/9825) from SparkFun. It
+is also possible to using a standard Arduino as an ISP programmer.
+
+ 
