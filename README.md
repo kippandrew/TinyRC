@@ -162,4 +162,3 @@ Example reading the packet from Arduino (Mega):
       }
       
       Serial.println();
-    }

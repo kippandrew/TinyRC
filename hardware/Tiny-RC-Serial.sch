@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.2">
+<eagle version="6.3">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -6171,7 +6171,7 @@ Source: www.kingbright.com</description>
 <part name="S2" library="SparkFun" deviceset="STAND-OFF" device="TIGHT"/>
 <part name="GND3" library="SparkFun" deviceset="GND" device=""/>
 <part name="U$3" library="SparkFun" deviceset="5V" device=""/>
-<part name="C3" library="SparkFun" deviceset="CAP" device="PTH" value="0.1uF"/>
+<part name="C1" library="SparkFun" deviceset="CAP" device="PTH" value="0.1uF"/>
 <part name="JP2" library="pinhead" deviceset="PINHD-2X3" device=""/>
 <part name="GND5" library="SparkFun" deviceset="GND" device=""/>
 <part name="IC1" library="attiny" deviceset="ATTINY84A-SSU" device=""/>
@@ -6198,7 +6198,7 @@ Source: www.kingbright.com</description>
 <instance part="S2" gate="G$1" x="180.34" y="55.88"/>
 <instance part="GND3" gate="1" x="68.58" y="78.74"/>
 <instance part="U$3" gate="G$1" x="55.88" y="119.38"/>
-<instance part="C3" gate="G$1" x="55.88" y="93.98"/>
+<instance part="C1" gate="G$1" x="55.88" y="93.98"/>
 <instance part="JP2" gate="A" x="88.9" y="134.62" rot="MR0"/>
 <instance part="GND5" gate="1" x="71.12" y="121.92"/>
 <instance part="IC1" gate="G$1" x="93.98" y="73.66"/>
@@ -6224,7 +6224,7 @@ Source: www.kingbright.com</description>
 <pinref part="U$3" gate="G$1" pin="5V"/>
 <wire x1="73.66" y1="101.6" x2="55.88" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="101.6" x2="55.88" y2="119.38" width="0.1524" layer="91"/>
-<pinref part="C3" gate="G$1" pin="1"/>
+<pinref part="C1" gate="G$1" pin="1"/>
 <wire x1="55.88" y1="101.6" x2="55.88" y2="99.06" width="0.1524" layer="91"/>
 <junction x="55.88" y="101.6"/>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
@@ -6253,7 +6253,7 @@ Source: www.kingbright.com</description>
 </segment>
 <segment>
 <pinref part="GND3" gate="1" pin="GND"/>
-<pinref part="C3" gate="G$1" pin="2"/>
+<pinref part="C1" gate="G$1" pin="2"/>
 <wire x1="68.58" y1="88.9" x2="68.58" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="91.44" x2="55.88" y2="88.9" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="88.9" x2="68.58" y2="88.9" width="0.1524" layer="91"/>
