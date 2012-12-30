@@ -97,6 +97,7 @@ the start of the packet. The packet header is 4 bytes with a value 0xFF.
 Each channel follows the packet header encoded in two bytes.
 
 Example Packet:
+
     --------------------------------------------------------------------------------------------------------------------------
     | header (4 bytes)       | CH1 (2 bytes) | CH2 (2 bytes) | CH3 (2 bytes) | CH4 (2 bytes) | CH5 (2 bytes) | CH6 (2 bytes) |
     --------------------------------------------------------------------------------------------------------------------------
