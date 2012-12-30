@@ -37,15 +37,41 @@ features and ISCP header, and power LED.
         <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/ATTINY84A-SSU/ATTINY84A-SSU-ND/3046522">ATTINY84A-SSU-ND</a></td>
     </tr>
     <tr>
+        <td>C1</td>
+        <td>Capcaitor 0.1uF</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/C315C104M5U5TA/399-4151-ND/817927">399-4151-ND</a></td>
+    </tr>
+    <tr>
+        <td>D1</td>
+        <td>Diode SOD-323 SMD</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/BAS316,115/568-5003-1-ND/2209919">568-5003-1-ND</a></td>
+    </tr>
+    <tr>
+        <td>R1</td>
+        <td>Resistor 330 ohm 1/4W 1206 SMD</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/RC1206JR-07330RL/311-330ERCT-ND/732226">311-330ERCT-ND</a></td>
+    </tr>
+    <tr>
+        <td>LED1</td>
+        <td>LED Red 1206 SMD</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/LTST-C150CKT/160-1167-1-ND/269239">160-1167-1-ND</a></td>
+    </tr>
+    <tr>
+        <td>JP1</td>
+        <td>0.1" pitch Header 2x5</td>
+        <td>DigiKey P/N: <a href=""></a></td>
+    </tr>
+    <tr>
+        <td>JP2</td>
+        <td>0.1" pitch Header 2x3</td>
+        <td>DigiKey P/N: <a href=""></a></td>
+    </tr>
+    <tr>
+        <td>JP3</td>
+        <td>JST PH Header (4) </td>
+        <td>DigiKey P/N: <a href=""></a></td>
     </tr>
 </table>
-- C1 - Capcaitor 0.1uF [DigiKey P/N: 399-4151-ND](http://www.digikey.com/product-detail/en/C315C104M5U5TA/399-4151-ND/817927)
-- D1 - Diode SOD-323 SMD [DigiKey P/N: 568-5003-1-ND](http://www.digikey.com/product-detail/en/BAS316,115/568-5003-1-ND/2209919)
-- R1 - Resistor 330 ohm 1/4W 1206 SMD [DigiKey P/N: 311-330ERCT-ND](http://www.digikey.com/product-detail/en/RC1206JR-07330RL/311-330ERCT-ND/732226)
-- LED1 - LED Red 1206 SMD [DigiKey P/N: 160-1167-1-ND](http://www.digikey.com/product-detail/en/LTST-C150CKT/160-1167-1-ND/269239)
-- JP1 - 0.1" pitch Header 2x5 [DigiKey P/N: ]()
-- JP2 - 0.1" pitch Header 2x3 [DigiKey P/N: ]()
-- JP3 - JST PH Header (4) [DigiKey P/N: ]() 
 
 Software
 --------
