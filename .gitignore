@@ -1,3 +1,3 @@
 hardware/*.b#*
 hardware/*.s#*
-src/build-*
+src/TinyRC/build-*
