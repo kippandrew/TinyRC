@@ -1,3 +1,7 @@
+hardware/*.gpi
+hardware/*.ger
+hardware/*.xln
+hardware/*.dri
 hardware/*.b#*
 hardware/*.s#*
 src/TinyRC/build-*
