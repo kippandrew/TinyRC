@@ -32,6 +32,8 @@
 //             (D  6)  PA6  7|    |8   PA5  (D  5) - CH6
 //                           +----+
 
+#define _SS_PCINT0_DISABLE
+
 #include <CustomSoftwareSerial.h>
 
 #define RECEIVER_CH1 0
