@@ -43,14 +43,24 @@ The board accepts a +5V source, and can provide power to the receiver.
         <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/C315C104M5U5TA/399-4151-ND/817927">399-4151-ND</a></td>
     </tr>
     <tr>
+        <td>C2,C3</td>
+        <td>CAP CER 22PF 50V 5% SMD 0805</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/CC0805JRNPO9BN220/311-1103-1-ND/303013">311-1103-1-ND</a></td>
+    </tr>
+    <tr>
+        <td>Y1</td>
+        <td>CRYSTAL 20.0MHZ 50PF THRU</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/ATS20B/CTX1108-ND/2640039">CTX1108-ND</a></td>
+    </tr>
+    <tr>
         <td>D1</td>
         <td>Diode SOD-323 SMD</td>
         <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/BAS316,115/568-5003-1-ND/2209919">568-5003-1-ND</a></td>
     </tr>
     <tr>
         <td>R1</td>
-        <td>Resistor 330 ohm 1/4W 1206 SMD</td>
-        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/RC1206JR-07330RL/311-330ERCT-ND/732226">311-330ERCT-ND</a></td>
+        <td>RES 330 OHM 5% 0805</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/ERJ-P06J331V/P330ADCT-ND/525496">P330ADCT-ND</a></td>
     </tr>
     <tr>
         <td>LED1</td>
@@ -69,8 +79,8 @@ The board accepts a +5V source, and can provide power to the receiver.
     </tr>
     <tr>
         <td>JP3</td>
-        <td>JST PH Header (4) </td>
-        <td>DigiKey P/N: <a href="http://www.digikey.com/scripts/DkSearch/dksus.dll?WT.z_header=search_go&lang=en&keywords=455-1706-ND&x=0&y=0&cur=USD">455-1706-ND</a></td>
+        <td>0.1" pitch Header 1x3</td>
+        <td>DigiKey P/N: <a href="http://www.digikey.com/product-detail/en/68000-103HLF/609-3461-ND/2023309">609-3461-ND</a></Otd>
     </tr>
 </table>
 
