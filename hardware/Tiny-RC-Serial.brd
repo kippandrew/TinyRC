@@ -108,8 +108,6 @@
 <wire x1="0" y1="27.94" x2="0" y2="0" width="0" layer="20"/>
 <dimension x1="-1.28365" y1="27.920059375" x2="-1.27" y2="0" x3="-11.43" y3="13.960028125" layer="47" dtype="vertical"/>
 <dimension x1="0" y1="0" x2="27.97374375" y2="-2.5623375" x3="13.986871875" y3="-13.97" layer="47" dtype="horizontal"/>
-<dimension x1="0" y1="0" x2="13.97" y2="-1.27" x3="6.985" y3="-7.62" layer="47" dtype="horizontal"/>
-<dimension x1="0" y1="0" x2="-1.27" y2="13.97" x3="-3.81" y3="6.985" layer="47" dtype="vertical"/>
 <text x="13.97" y="0.635" size="0.6096" layer="121" rot="SR0" align="center">(c) 2013 Andy Kipp</text>
 <text x="27.305" y="13.97" size="0.6096" layer="121" rot="R90" align="center">TinyRC Rev 3.0</text>
 <text x="26.035" y="9.525" size="0.6096" layer="121" rot="R90" align="center">1</text>
