@@ -101,18 +101,19 @@ default for the ATTiny84 is 1Mhz.
 Instructions
 ------------
 
-By default the TinyRC will output a 16 byte serial
+By default the TinyRC will output a 17 byte serial
 packet every 100ms. The first 4 bytes are a header used to identify
 the start of the packet. The packet header is 4 bytes with a value 0xFF.
-Each channel follows the packet header encoded in two bytes.
+Following the packet header is 1 byte of receiver status. This is currently
+unused. Each channel follows the packet header encoded in two bytes.
 
 Example Packet:
 
-    --------------------------------------------------------------------------------------------------------------------------
-    | header (4 bytes)       | CH1 (2 bytes) | CH2 (2 bytes) | CH3 (2 bytes) | CH4 (2 bytes) | CH5 (2 bytes) | CH6 (2 bytes) |
-    --------------------------------------------------------------------------------------------------------------------------
-    | 0xFF, 0xFF, 0xFF, 0xFF | 0x00, 0x01    | 0x02, 0x03    | 0x04, 0x05    | 0x06, 0x07    | 0x06, 0x07    | 0x08, 0x0A    |
-    --------------------------------------------------------------------------------------------------------------------------
+    --------------------------------------------------------------------------------------------------------------------------------------------
+    | header (4 bytes)       | Status (1 byte) | CH1 (2 bytes) | CH2 (2 bytes) | CH3 (2 bytes) | CH4 (2 bytes) | CH5 (2 bytes) | CH6 (2 bytes) |
+    --------------------------------------------------------------------------------------------------------------------------------------------
+    | 0xFF, 0xFF, 0xFF, 0xFF | 0x00            | 0x00, 0x01    | 0x02, 0x03    | 0x04, 0x05    | 0x06, 0x07    | 0x06, 0x07    | 0x08, 0x0A    |
+    --------------------------------------------------------------------------------------------------------------------------------------------
 
 Example reading the packet from Arduino (Mega):
 
@@ -151,8 +152,10 @@ Example reading the packet from Arduino (Mega):
       static uint16_t channels[6];
       byte len;
       uint8_t buf[2];
+      uint8_t status;
 
       if (readPacketHeader(packetHeader, 4, 10)) {
+        status = Serial1.read();
         // for each channel
         for (int ch = 0; ch < 6; ch++) {
           // Read two bytes
