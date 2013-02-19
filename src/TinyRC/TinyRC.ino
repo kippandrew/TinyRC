@@ -62,9 +62,11 @@
 
 #define NUMBER_RECEIVER_CHANNELS 6
 
-#define STARTUP_TIMER 500
+#define RECEIVER_STATUS_WATCHDOG   1
 
+#define STARTUP_TIMER 500
 #define OUTPUT_TIMER 100 
+#define WATCHDOG_TIMER 500
 
 //#define DEBUG_SERIAL_OUTPUT 
 
@@ -82,16 +84,22 @@ struct receiver_interrupt_t {
 volatile receiver_interrupt_t receiver_interrupts[NUMBER_RECEIVER_CHANNELS];
 
 // receiver channel update flag 
-volatile uint8_t bUpdateFlagsShared;
+volatile uint8_t shared_receiver_update_flags;
 
 // receiver elasped time for each receiver channel
-volatile uint16_t unReceiverShared[NUMBER_RECEIVER_CHANNELS];
+volatile uint16_t shared_receiver_timer[NUMBER_RECEIVER_CHANNELS];
 
 // receiver start time for each receiver channel
-volatile uint32_t ulReceiverStart[NUMBER_RECEIVER_CHANNELS];
+volatile uint32_t shared_receiver_timer_start[NUMBER_RECEIVER_CHANNELS];
+
+// watchdog timer
+volatile uint32_t watchdog_timer = 0;
+
+// receiver status flags
+volatile uint8_t receiver_status_flags = 0;
 
 // serial output timer
-volatile static uint32_t ulOutputTimer = 0;
+volatile uint32_t output_timer = 0;
 
 // serial interface
 SoftwareSerial serial(SERIAL_RX_PIN, SERIAL_TX_PIN); // RX, TX
@@ -129,16 +137,16 @@ void handleReceiverInterrupt(uint8_t pin, uint8_t channel) {
   // if the pin is high, its a rising edge of the signal pulse, so lets record its value
   if(digitalRead(pin) == HIGH)
   { 
-    ulReceiverStart[channel] = micros();
+    shared_receiver_timer_start[channel] = micros();
   }
   else
   {
     // else it must be a falling edge, so lets get the time and subtract the time of the rising edge
     // this gives use the time between the rising and falling edges i.e. the pulse duration.
-    unReceiverShared[channel] = (uint16_t)(micros() - ulReceiverStart[channel]);
+    shared_receiver_timer[channel] = (uint16_t)(micros() - shared_receiver_timer_start[channel]);
     // set the channel flag to indicate that a new channel signal has been received
     uint8_t flag = channel + 1;
-    bUpdateFlagsShared |= flag;
+    shared_receiver_update_flags |= flag;
   }
 }
 
@@ -167,91 +175,105 @@ void setup()
  */
 void loop()
 {
-  static uint8_t bUpdateFlags;
-  static uint16_t unReceiver[NUMBER_RECEIVER_CHANNELS];
+  static uint8_t receiver_update_flags;
+  static uint16_t receiver[NUMBER_RECEIVER_CHANNELS];
   uint8_t buf[sizeof(uint16_t)];
- 
+
   // check shared update flags to see if any channels have a new signal
-  if(bUpdateFlagsShared)
+  if(shared_receiver_update_flags)
   {
     noInterrupts(); // turn interrupts off quickly while we take local copies of the shared variables
 
+    // update watchdog timer
+    watchdog_timer = millis();
+
     // take a local copy of which channels were updated in case we need to use this in the rest of loop
-    bUpdateFlags = bUpdateFlagsShared;
+    receiver_update_flags = shared_receiver_update_flags;
 
     // check for updated channels
-    if(bUpdateFlags & RECEIVER_CH1_FLAG)
+    if(receiver_update_flags & RECEIVER_CH1_FLAG)
     {
-      unReceiver[RECEIVER_CH1] = unReceiverShared[RECEIVER_CH1];
+      receiver[RECEIVER_CH1] = shared_receiver_timer[RECEIVER_CH1];
     }
-    if(bUpdateFlags & RECEIVER_CH2_FLAG)
+    if(receiver_update_flags & RECEIVER_CH2_FLAG)
     {
-      unReceiver[RECEIVER_CH2] = unReceiverShared[RECEIVER_CH2];
+      receiver[RECEIVER_CH2] = shared_receiver_timer[RECEIVER_CH2];
     }
-    if(bUpdateFlags & RECEIVER_CH3_FLAG)
+    if(receiver_update_flags & RECEIVER_CH3_FLAG)
     {
-      unReceiver[RECEIVER_CH3] = unReceiverShared[RECEIVER_CH3];
+      receiver[RECEIVER_CH3] = shared_receiver_timer[RECEIVER_CH3];
     }
-    if(bUpdateFlags & RECEIVER_CH4_FLAG)
+    if(receiver_update_flags & RECEIVER_CH4_FLAG)
     {
-      unReceiver[RECEIVER_CH4] = unReceiverShared[RECEIVER_CH4];
+      receiver[RECEIVER_CH4] = shared_receiver_timer[RECEIVER_CH4];
     }
-    if(bUpdateFlags & RECEIVER_CH5_FLAG)
+    if(receiver_update_flags & RECEIVER_CH5_FLAG)
     {
-      unReceiver[RECEIVER_CH5] = unReceiverShared[RECEIVER_CH5];
+      receiver[RECEIVER_CH5] = shared_receiver_timer[RECEIVER_CH5];
     }
-    if(bUpdateFlags & RECEIVER_CH6_FLAG)
+    if(receiver_update_flags & RECEIVER_CH6_FLAG)
     {
-      unReceiver[RECEIVER_CH6] = unReceiverShared[RECEIVER_CH6];
+      receiver[RECEIVER_CH6] = shared_receiver_timer[RECEIVER_CH6];
     }
     
     // clear shared copy of updated flags as we have already taken the updates
-    bUpdateFlagsShared = 0;
+    shared_receiver_update_flags = 0;
 
     interrupts(); // turn interrupts back on
   } 
+
+  // check watchdog timer
+  if ((millis() - watchdog_timer) >= WATCHDOG_TIMER) {
+    receiver_status_flags |= RECEIVER_STATUS_WATCHDOG;
+  } else {
+    receiver_status_flags &= ~RECEIVER_STATUS_WATCHDOG;
+  }
 
 #ifdef DEBUG_SERIAL_OUTPUT 
 
   serial.write(0xFE);
   serial.write(0x01);
-  
-  serial.print(unReceiver[RECEIVER_CH1], DEC);
+  serial.print(receiver_status_flags, HEX);
   serial.print(" ");
-  serial.print(unReceiver[RECEIVER_CH2], DEC);
+  serial.print(receiver[RECEIVER_CH1], DEC);
   serial.print(" ");
-  serial.print(unReceiver[RECEIVER_CH3], DEC);
+  serial.print(receiver[RECEIVER_CH2], DEC);
   serial.print(" ");
-  serial.print(unReceiver[RECEIVER_CH4], DEC);
+  serial.print(receiver[RECEIVER_CH3], DEC);
   serial.print(" ");
-  serial.print(unReceiver[RECEIVER_CH5], DEC);
+  serial.print(receiver[RECEIVER_CH4], DEC);
   serial.print(" ");
-  serial.print(unReceiver[RECEIVER_CH6], DEC);
+  serial.print(receiver[RECEIVER_CH5], DEC);
+  serial.print(" ");
+  serial.print(receiver[RECEIVER_CH6], DEC);
   delay(100);
   
 #else
 
   // only write to the serial stream after OUTPUT_TIMER milliseconds
-  if ((millis() - ulOutputTimer) >= OUTPUT_TIMER) {
+  if ((millis() - output_timer) >= OUTPUT_TIMER) {
     
     // update output timer
-    ulOutputTimer = millis();
+    output_timer = millis();
  
     // write packet header 
     serial.write(serialPacketHeader, sizeof(serialPacketHeader));
+   
+    // write receiver status flags 
+    serial.write(receiver_status_flags);
 
     // write receiver output to serial
-    memcpy(buf, &unReceiver[RECEIVER_CH1], sizeof(uint16_t));
+    memcpy(buf, &receiver[RECEIVER_CH1], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
-    memcpy(buf, &unReceiver[RECEIVER_CH2], sizeof(uint16_t));
+    memcpy(buf, &receiver[RECEIVER_CH2], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
-    memcpy(buf, &unReceiver[RECEIVER_CH3], sizeof(uint16_t));
+    memcpy(buf, &receiver[RECEIVER_CH3], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
-    memcpy(buf, &unReceiver[RECEIVER_CH4], sizeof(uint16_t));
+    memcpy(buf, &receiver[RECEIVER_CH4], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
-    memcpy(buf, &unReceiver[RECEIVER_CH5], sizeof(uint16_t));
+    memcpy(buf, &receiver[RECEIVER_CH5], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
-    memcpy(buf, &unReceiver[RECEIVER_CH6], sizeof(uint16_t));
+    memcpy(buf, &receiver[RECEIVER_CH6], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
 
   }
