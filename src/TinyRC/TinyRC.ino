@@ -1,6 +1,6 @@
-// 
-// Copyright (C) 2012 Andy Kipp <kipp.andrew@gmail.com> 
-// 
+//
+// Copyright (C) 2012-2013 Andy Kipp <kipp.andrew@gmail.com> 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -65,10 +65,10 @@
 #define RECEIVER_STATUS_WATCHDOG   1
 
 #define STARTUP_TIMER 500
-#define OUTPUT_TIMER 100 
+#define OUTPUT_TIMER 100
 #define WATCHDOG_TIMER 500
 
-//#define DEBUG_SERIAL_OUTPUT 
+//#define DEBUG_SERIAL_OUTPUT
 
 // serial packet header
 const uint8_t serialPacketHeader[4] = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -108,20 +108,20 @@ SoftwareSerial serial(SERIAL_RX_PIN, SERIAL_TX_PIN); // RX, TX
  * setup a receiver_interrupt for the given channel on the given pin
  */
 void setupReceiverInterrupt(uint8_t pin, uint8_t channel) {
-  
+
   volatile receiver_interrupt_t *inrpt;
-  
+
   // Get interrupt
   inrpt = &receiver_interrupts[channel];
 
   // Get bit mask for pin
   uint8_t bitMask = digitalPinToBitMask(pin);
-  
+
   // Set interrupt data
   inrpt->bitMask = bitMask;
   inrpt->pin = pin;
   inrpt->channel = channel;
-  
+
   // Enable pin change interrupt
   GIMSK |= (1<<PCIE0);
   if ( (PCMSK0 & bitMask) == 0 )
@@ -136,7 +136,7 @@ void setupReceiverInterrupt(uint8_t pin, uint8_t channel) {
 void handleReceiverInterrupt(uint8_t pin, uint8_t channel) {
   // if the pin is high, its a rising edge of the signal pulse, so lets record its value
   if(digitalRead(pin) == HIGH)
-  { 
+  {
     shared_receiver_timer_start[channel] = micros();
   }
   else
@@ -157,7 +157,7 @@ void setup()
 {
   // Open serial communications and wait for port to open
   serial.begin(9600);
-  
+
   // setup receiver interrupts
   setupReceiverInterrupt(RECEIVER_CH1_IN_PIN, RECEIVER_CH1);
   setupReceiverInterrupt(RECEIVER_CH2_IN_PIN, RECEIVER_CH2);
@@ -166,7 +166,7 @@ void setup()
   setupReceiverInterrupt(RECEIVER_CH5_IN_PIN, RECEIVER_CH5);
   setupReceiverInterrupt(RECEIVER_CH6_IN_PIN, RECEIVER_CH6);
   sei();
- 
+
   delay(STARTUP_TIMER);
 }
 
@@ -215,12 +215,12 @@ void loop()
     {
       receiver[RECEIVER_CH6] = shared_receiver_timer[RECEIVER_CH6];
     }
-    
+
     // clear shared copy of updated flags as we have already taken the updates
     shared_receiver_update_flags = 0;
 
     interrupts(); // turn interrupts back on
-  } 
+  }
 
   // check watchdog timer
   if ((millis() - watchdog_timer) >= WATCHDOG_TIMER) {
@@ -247,20 +247,17 @@ void loop()
   serial.print(" ");
   serial.print(receiver[RECEIVER_CH6], DEC);
   delay(100);
-  
+
 #else
 
   // only write to the serial stream after OUTPUT_TIMER milliseconds
   if ((millis() - output_timer) >= OUTPUT_TIMER) {
-    
+
     // update output timer
     output_timer = millis();
- 
+
     // write packet header 
     serial.write(serialPacketHeader, sizeof(serialPacketHeader));
-   
-    // write receiver status flags 
-    serial.write(receiver_status_flags);
 
     // write receiver output to serial
     memcpy(buf, &receiver[RECEIVER_CH1], sizeof(uint16_t));
@@ -276,8 +273,11 @@ void loop()
     memcpy(buf, &receiver[RECEIVER_CH6], sizeof(uint16_t));
     serial.write(buf, sizeof(uint16_t));
 
+    // write receiver status flags 
+    serial.write(receiver_status_flags);
+
   }
-   
+
 #endif
 
 }
@@ -288,12 +288,12 @@ void loop()
 ISR( PCINT0_vect )
 {
   volatile static uint8_t prevPinState;
-  
+
   uint8_t currentPinState = PINA & PCMSK0;
   uint8_t bitMask = currentPinState ^ prevPinState;
 
   volatile receiver_interrupt_t *inrpt;
-  
+
   inrpt = receiver_interrupts;
   for ( uint8_t i=0; i < NUMBER_RECEIVER_CHANNELS; i++ ) {
     if ((inrpt->bitMask & bitMask)){
@@ -302,6 +302,6 @@ ISR( PCINT0_vect )
     }
     ++inrpt;
   }
-  
+
   prevPinState = currentPinState;
 }
