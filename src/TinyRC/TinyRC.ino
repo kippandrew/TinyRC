@@ -20,21 +20,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// Reference: ATMEL ATTINY84 / ARDUINO
+// Reference: ATMEL ATMEGA328
 //
 //                           +-\/-+
-//                     VCC  1|    |14  GND
-//        TX - (D 10)  PB0  2|    |13  AREF (D  0) - CH1
-//        RX - (D  9)  PB1  3|    |12  PA1  (D  1) - CH2
-//                     PB3  4|    |11  PA2  (D  2) - CH3
-//             (D  8)  PB2  5|    |10  PA3  (D  3) - CH4
-//             (D  7)  PA7  6|    |9   PA4  (D  4) - CH5
-//             (D  6)  PA6  7|    |8   PA5  (D  5) - CH6
+//             RESET  PC6   1|    |28  PC5  (A 5)
+//         (D 0) RX   PD0   2|    |27  PC4  (A 4)
+//         (D 1) TX   PD1   3|    |26  PC3  (A 3)
+//             (D 2)  PD2   4|    |25  PC2  (A 2)
+//             (D 3)  PD3   5|    |24  PC1  (A 1)
+//             (D 4)  PD4   6|    |23  PC0  (A 0)
+//                    VCC   7|    |22  GND
+//                    GND   8|    |21  AREF
+//             XTAL1  PB6   9|    |20  AVCC (A 0)
+//             XTAL2  PB7  10|    |19  PB5  (D 13)
+//             (D 5)  PD5  11|    |18  PB4  (D 12)
+//             (D 6)  PD6  12|    |17  PB3  (D 11)
+//             (D 7)  PD7  13|    |16  PB2  (D 10)
+//             (D 8)  PD0  14|    |15  PB1  (D 9)
 //                           +----+
-
-#define _SS_PCINT0_DISABLE
-
-#include <CustomSoftwareSerial.h>
 
 #define RECEIVER_CH1 0
 #define RECEIVER_CH2 1
@@ -43,15 +46,12 @@
 #define RECEIVER_CH5 4
 #define RECEIVER_CH6 5
 
-#define RECEIVER_CH1_IN_PIN 0 // pin 13
-#define RECEIVER_CH2_IN_PIN 1  // pin 12
-#define RECEIVER_CH3_IN_PIN 2  // pin 11
-#define RECEIVER_CH4_IN_PIN 3  // pin 10
-#define RECEIVER_CH5_IN_PIN 4  // pin 9
-#define RECEIVER_CH6_IN_PIN 5  // pin 8
-
-#define SERIAL_TX_PIN 10 // pin 2
-#define SERIAL_RX_PIN 9  // pin 3
+#define RECEIVER_CH1_IN_PIN 0  // PC0 / A0 / PCINT8
+#define RECEIVER_CH2_IN_PIN 1  // PC1 / A1 / PCINT9
+#define RECEIVER_CH3_IN_PIN 2  // PC2 / A2 / PCINT10
+#define RECEIVER_CH4_IN_PIN 3  // PC3 / A3 / PCINT11
+#define RECEIVER_CH5_IN_PIN 4  // PC4 / A4 / PCINT12
+#define RECEIVER_CH6_IN_PIN 5  // PC5 / A5 / PCINT13
 
 #define RECEIVER_CH1_FLAG 1
 #define RECEIVER_CH2_FLAG 2
@@ -70,7 +70,7 @@
 
 //#define DEBUG_SERIAL_OUTPUT
 
-// serial packet header
+// Serial packet header
 const uint8_t serialPacketHeader[4] = {0xFF, 0xFF, 0xFF, 0xFF};
 
 // define receiver_interrupt struct
@@ -98,11 +98,11 @@ volatile uint32_t watchdog_timer = 0;
 // receiver status flags
 volatile uint8_t receiver_status_flags = 0;
 
-// serial output timer
+// Serial output timer
 volatile uint32_t output_timer = 0;
 
-// serial interface
-SoftwareSerial serial(SERIAL_RX_PIN, SERIAL_TX_PIN); // RX, TX
+// Serial interface
+//SoftwareSerial SoftwareSerial(SERIAL_RX_PIN, SERIAL_TX_PIN); // RX, TX
 
 /**
  * setup a receiver_interrupt for the given channel on the given pin
@@ -123,10 +123,11 @@ void setupReceiverInterrupt(uint8_t pin, uint8_t channel) {
   inrpt->channel = channel;
 
   // Enable pin change interrupt
-  GIMSK |= (1<<PCIE0);
-  if ( (PCMSK0 & bitMask) == 0 )
+  //GIMSK |= (1<<PCIE);
+  PCICR |= (1<<1);
+  if ( (PCMSK1 & bitMask) == 0 )
   {
-    PCMSK0 |= bitMask;
+    PCMSK1 |= bitMask;
   }
 }
 
@@ -155,16 +156,17 @@ void handleReceiverInterrupt(uint8_t pin, uint8_t channel) {
  */
 void setup()
 {
-  // Open serial communications and wait for port to open
-  serial.begin(9600);
+  // Open Serial communications and wait for port to open
+  Serial.begin(9600);
 
   // setup receiver interrupts
-  setupReceiverInterrupt(RECEIVER_CH1_IN_PIN, RECEIVER_CH1);
-  setupReceiverInterrupt(RECEIVER_CH2_IN_PIN, RECEIVER_CH2);
-  setupReceiverInterrupt(RECEIVER_CH3_IN_PIN, RECEIVER_CH3);
-  setupReceiverInterrupt(RECEIVER_CH4_IN_PIN, RECEIVER_CH4);
-  setupReceiverInterrupt(RECEIVER_CH5_IN_PIN, RECEIVER_CH5);
-  setupReceiverInterrupt(RECEIVER_CH6_IN_PIN, RECEIVER_CH6);
+
+  //setupReceiverInterrupt(analogInputToDigialPin(RECEIVER_CH1_IN_PIN), RECEIVER_CH1);
+  setupReceiverInterrupt(analogInputToDigitalPin(RECEIVER_CH2_IN_PIN), RECEIVER_CH2);
+  //setupReceiverInterrupt(RECEIVER_CH3_IN_PIN, RECEIVER_CH3);
+  //setupReceiverInterrupt(RECEIVER_CH4_IN_PIN, RECEIVER_CH4);
+  //setupReceiverInterrupt(RECEIVER_CH5_IN_PIN, RECEIVER_CH5);
+  //setupReceiverInterrupt(RECEIVER_CH6_IN_PIN, RECEIVER_CH6);
   sei();
 
   delay(STARTUP_TIMER);
@@ -229,52 +231,52 @@ void loop()
     receiver_status_flags &= ~RECEIVER_STATUS_WATCHDOG;
   }
 
-#ifdef DEBUG_SERIAL_OUTPUT 
+#ifdef DEBUG_Serial.OUTPUT 
 
-  serial.write(0xFE);
-  serial.write(0x01);
-  serial.print(receiver_status_flags, HEX);
-  serial.print(" ");
-  serial.print(receiver[RECEIVER_CH1], DEC);
-  serial.print(" ");
-  serial.print(receiver[RECEIVER_CH2], DEC);
-  serial.print(" ");
-  serial.print(receiver[RECEIVER_CH3], DEC);
-  serial.print(" ");
-  serial.print(receiver[RECEIVER_CH4], DEC);
-  serial.print(" ");
-  serial.print(receiver[RECEIVER_CH5], DEC);
-  serial.print(" ");
-  serial.print(receiver[RECEIVER_CH6], DEC);
+  Serial.write(0xFE);
+  Serial.write(0x01);
+  Serial.print(receiver_status_flags, HEX);
+  Serial.print(" ");
+  Serial.print(receiver[RECEIVER_CH1], DEC);
+  Serial.print(" ");
+  Serial.print(receiver[RECEIVER_CH2], DEC);
+  Serial.print(" ");
+  Serial.print(receiver[RECEIVER_CH3], DEC);
+  Serial.print(" ");
+  Serial.print(receiver[RECEIVER_CH4], DEC);
+  Serial.print(" ");
+  Serial.print(receiver[RECEIVER_CH5], DEC);
+  Serial.print(" ");
+  Serial.print(receiver[RECEIVER_CH6], DEC);
   delay(100);
 
 #else
 
-  // only write to the serial stream after OUTPUT_TIMER milliseconds
+  // only write to the Serial.stream after OUTPUT_TIMER milliseconds
   if ((millis() - output_timer) >= OUTPUT_TIMER) {
 
     // update output timer
     output_timer = millis();
 
     // write packet header 
-    serial.write(serialPacketHeader, sizeof(serialPacketHeader));
+    Serial.write(serialPacketHeader, sizeof(serialPacketHeader));
 
     // write receiver output to serial
     memcpy(buf, &receiver[RECEIVER_CH1], sizeof(uint16_t));
-    serial.write(buf, sizeof(uint16_t));
+    Serial.write(buf, sizeof(uint16_t));
     memcpy(buf, &receiver[RECEIVER_CH2], sizeof(uint16_t));
-    serial.write(buf, sizeof(uint16_t));
+    Serial.write(buf, sizeof(uint16_t));
     memcpy(buf, &receiver[RECEIVER_CH3], sizeof(uint16_t));
-    serial.write(buf, sizeof(uint16_t));
+    Serial.write(buf, sizeof(uint16_t));
     memcpy(buf, &receiver[RECEIVER_CH4], sizeof(uint16_t));
-    serial.write(buf, sizeof(uint16_t));
+    Serial.write(buf, sizeof(uint16_t));
     memcpy(buf, &receiver[RECEIVER_CH5], sizeof(uint16_t));
-    serial.write(buf, sizeof(uint16_t));
+    Serial.write(buf, sizeof(uint16_t));
     memcpy(buf, &receiver[RECEIVER_CH6], sizeof(uint16_t));
-    serial.write(buf, sizeof(uint16_t));
+    Serial.write(buf, sizeof(uint16_t));
 
     // write receiver status flags 
-    serial.write(receiver_status_flags);
+    Serial.write(receiver_status_flags);
 
   }
 
@@ -285,11 +287,11 @@ void loop()
 /**
  * interrupt service routine for pin change interrupt (PORTA)
  */
-ISR( PCINT0_vect )
+ISR( PCINT1_vect )
 {
   volatile static uint8_t prevPinState;
 
-  uint8_t currentPinState = PINA & PCMSK0;
+  uint8_t currentPinState = PORTC & PCMSK1;
   uint8_t bitMask = currentPinState ^ prevPinState;
 
   volatile receiver_interrupt_t *inrpt;
